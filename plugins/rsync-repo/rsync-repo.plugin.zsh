@@ -1,6 +1,17 @@
 RSYNC_REPO_INTERVAL=${RSYNC_REPO_INTERVAL:=30}
 RSYNC_REPO_REMOTE_ROOT=${RSYNC_REPO_REMOTE_ROOT}
 
+function rsync-repo-code-sync {
+  (`command git rev-parse --is-inside-work-tree 2>/dev/null` &&
+  [[ ! -f $dir/NO_RSYNC_REPO ]] &&
+  [[ ! -z $RSYNC_REPO_REMOTE_ROOT ]] &&
+  dir=`command git rev-parse --git-dir` &&
+  repo_name=`command git rev-parse --show-toplevel` &&
+  exclude_file=`command git rev-parse --git-path info/exclude` &&
+  command rsync -rlptzv --progress --delete --exclude-from=$exclude_file \
+    $repo_name $RSYNC_REPO_REMOTE_ROOT/. 2>/dev/null &>! $dir/RSYNC_REPO_LOG )
+}
+
 function rsync-repo-code {
   (`command git rev-parse --is-inside-work-tree 2>/dev/null` &&
   [[ ! -f $dir/NO_RSYNC_REPO ]] &&
