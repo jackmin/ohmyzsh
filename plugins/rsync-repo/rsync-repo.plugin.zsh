@@ -4,7 +4,7 @@ RSYNC_REPO_REMOTE_ROOT=${RSYNC_REPO_REMOTE_ROOT}
 function rsync-repo-code-sync {
   (`command git rev-parse --is-inside-work-tree 2>/dev/null` &&
   dir=`command git rev-parse --git-dir` &&
-  [[ ! -f $dir/NO_RSYNC_REPO ]] &&
+  [[ -f $dir/ENABLE_RSYNC_REPO ]] &&
   [[ ! -z $RSYNC_REPO_REMOTE_ROOT ]] &&
   repo_name=`command git rev-parse --show-toplevel` &&
   exclude_file=`command git rev-parse --git-path info/exclude` &&
@@ -15,7 +15,7 @@ function rsync-repo-code-sync {
 function rsync-repo-code {
   (`command git rev-parse --is-inside-work-tree 2>/dev/null` &&
   dir=`command git rev-parse --git-dir` &&
-  [[ ! -f $dir/NO_RSYNC_REPO ]] &&
+  [[ -f $dir/ENABLE_RSYNC_REPO ]] &&
   [[ ! -z $RSYNC_REPO_REMOTE_ROOT ]] &&
   repo_name=`command git rev-parse --show-toplevel` &&
   exclude_file=`command git rev-parse --git-path info/exclude` &&
@@ -26,12 +26,12 @@ function rsync-repo-code {
 
 function rsync-repo {
   `command git rev-parse --is-inside-work-tree 2>/dev/null` || return
-  guard="`command git rev-parse --git-dir`/NO_RSYNC_REPO"
+  guard="`command git rev-parse --git-dir`/ENABLE_RSYNC_REPO"
 
   (rm $guard 2>/dev/null &&
-    echo "${fg_bold[green]}enabled${reset_color}") ||
+    echo "${fg_bold[red]}disabled${reset_color}")  ||
   (touch $guard &&
-    echo "${fg_bold[red]}disabled${reset_color}")
+    echo "${fg_bold[green]}enabled${reset_color}")
 }
 
 function rsync-repo-prompt-info {
