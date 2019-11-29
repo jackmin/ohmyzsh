@@ -35,16 +35,20 @@ function rsync-repo {
 }
 
 function rsync-repo-prompt-info {
-   local dir
+   local dir rsync_status
    if [[ "$(command git rev-parse --is-inside-work-tree 2>/dev/null)" != "true" ]]; then
        return 0
    fi
    dir=`command git rev-parse --git-dir`
-   if [[ ! -f $dir/RSYNC_REPO_LOG ]]; then
+   if [[ -f $dir/ENABLE_RSYNC_REPO && -f $dir/RSYNC_REPO_LOG ]]; then
+	   rsync_status=`command grep -i 'rsync\serror\|total\ssize\sis'\
+		   $dir/RSYNC_REPO_LOG 2>/dev/null`
+   fi
+   if [[ ! -f $dir/ENABLE_RSYNC_REPO ]]; then
        echo "$RSYNC_REPO_PROMPT_NA"
-   elif [[ "$(command grep -i 'rsync error' $dir/RSYNC_REPO_LOG)" ]]; then
+   elif [[ $rsync_status =~ "rsync\serror" ]]; then
        echo "$RSYNC_REPO_PROMPT_N"
-   elif [[ "$(command grep -i 'total size is' $dir/RSYNC_REPO_LOG)" ]]; then
+   elif [[ $rsync_status =~ "total\ssize\sis" ]]; then
        echo "$RSYNC_REPO_PROMPT_S"
    else
        echo "$RSYNC_REPO_PROMPT_SS"
