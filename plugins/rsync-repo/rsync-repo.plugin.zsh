@@ -56,17 +56,17 @@ function rsync-repo-prompt-info {
 }
 
 # Override zle-line-init if it exists
-if (( $+functions[zle-line-init] )); then
-  eval "override-rsync-repo-$(declare -f zle-line-init)"
+#if (( $+functions[zle-line-init] )); then
+#  eval "override-rsync-repo-$(declare -f zle-line-init)"
 
-  function zle-line-init () {
-    rsync-repo-code
-    override-rsync-repo-zle-line-init
-  }
-else
-  function zle-line-init () {
-    rsync-repo-code
-  }
-fi
+#  function zle-line-init () {
+#    rsync-repo-code
+#    override-rsync-repo-zle-line-init
+#  }
+#else
+#  function zle-line-init () {
+#    rsync-repo-code
+#  }
+#fi
 
-zle -N zle-line-init
+#zle -N zle-line-init
