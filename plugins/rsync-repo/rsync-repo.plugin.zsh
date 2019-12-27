@@ -6,6 +6,9 @@ function rsync-repo-code-sync {
   dir=`command git rev-parse --git-dir` &&
   [[ -f $dir/ENABLE_RSYNC_REPO ]] &&
   [[ ! -z $RSYNC_REPO_REMOTE_ROOT ]] &&
+  rebase0=`command git rev-parse --git-path rebase-merge` &&
+  rebase1=`command git rev-parse --git-path rebase-apply` &&
+  [[ ! -d $rebase0 ]] && [[ ! -d $rebase1 ]] &&
   repo_name=`command git rev-parse --show-toplevel` &&
   exclude_file=`command git rev-parse --git-path info/exclude` &&
   command rsync -rlptzv --progress --delete --exclude-from=$exclude_file \
@@ -17,6 +20,9 @@ function rsync-repo-code {
   dir=`command git rev-parse --git-dir` &&
   [[ -f $dir/ENABLE_RSYNC_REPO ]] &&
   [[ ! -z $RSYNC_REPO_REMOTE_ROOT ]] &&
+  rebase0=`command git rev-parse --git-path rebase-merge` &&
+  rebase1=`command git rev-parse --git-path rebase-apply` &&
+  [[ ! -d $rebase0 ]] && [[ ! -d $rebase1 ]] &&
   repo_name=`command git rev-parse --show-toplevel` &&
   exclude_file=`command git rev-parse --git-path info/exclude` &&
   (( `date +%s` - `date -r $dir/RSYNC_REPO_LOG +%s 2>/dev/null || echo 0` > $RSYNC_REPO_INTERVAL )) &&
