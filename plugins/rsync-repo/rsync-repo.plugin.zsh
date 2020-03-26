@@ -1,6 +1,28 @@
 RSYNC_REPO_INTERVAL=${RSYNC_REPO_INTERVAL:=30}
 RSYNC_REPO_REMOTE_ROOT=${RSYNC_REPO_REMOTE_ROOT}
 
+function rsync-repo-code-sync-full {
+  (`command git rev-parse --is-inside-work-tree 2>/dev/null` &&
+  dir=`command git rev-parse --git-dir` &&
+  [[ -f $dir/ENABLE_RSYNC_REPO ]] &&
+  [[ ! -z $RSYNC_REPO_REMOTE_ROOT ]] &&
+  repo_name=`command git rev-parse --show-toplevel` &&
+  exclude_file=`command git rev-parse --git-path info/exclude` &&
+  command rsync -rlptzv --progress --delete --delete-excluded -e "ssh -o 'ControlPath=$HOME/.ssh/master-socket/%r@%h:%p'" --exclude-from=$exclude_file \
+    $repo_name $RSYNC_REPO_REMOTE_ROOT/. 2>/dev/null &>! $dir/RSYNC_REPO_LOG )
+}
+
+function rsync-repo-code-sync-force {
+  (`command git rev-parse --is-inside-work-tree 2>/dev/null` &&
+  dir=`command git rev-parse --git-dir` &&
+  [[ -f $dir/ENABLE_RSYNC_REPO ]] &&
+  [[ ! -z $RSYNC_REPO_REMOTE_ROOT ]] &&
+  repo_name=`command git rev-parse --show-toplevel` &&
+  exclude_file=`command git rev-parse --git-path info/exclude` &&
+  command rsync -rlptzv --progress --delete -e "ssh -o 'ControlPath=$HOME/.ssh/master-socket/%r@%h:%p'" --exclude-from=$exclude_file \
+    $repo_name $RSYNC_REPO_REMOTE_ROOT/. 2>/dev/null &>! $dir/RSYNC_REPO_LOG )
+}
+
 function rsync-repo-code-sync {
   (`command git rev-parse --is-inside-work-tree 2>/dev/null` &&
   dir=`command git rev-parse --git-dir` &&
