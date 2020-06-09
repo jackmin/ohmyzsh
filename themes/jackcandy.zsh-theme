@@ -8,6 +8,12 @@ elif [[ $hname == "dev-r630-07" ]]; then
 elif [[ $hname == "dev-r630-08" ]]; then
 	PROMPT=$'%{$fg_bold[magenta]%}%n@%m %{$fg[blue]%}%D{[%X]} %{$reset_color%}%{$fg[white]%}[%~]%{$reset_color%} $(git_prompt_info) $(rsync-repo-prompt-info)\
 %{$fg[blue]%}->%{$fg_bold[blue]%} %#%{$reset_color%} '
+elif [[ $hname == "mtbc-r740-01" ]]; then
+	PROMPT=$'%{$fg_bold[yellow]%}%n@%m %{$fg[blue]%}%D{[%X]} %{$reset_color%}%{$fg[white]%}[%~]%{$reset_color%} $(git_prompt_info) $(rsync-repo-prompt-info)\
+%{$fg[blue]%}->%{$fg_bold[blue]%} %#%{$reset_color%} '
+elif [[ $hname == "mtbc-r740-02" ]]; then
+	PROMPT=$'%{$fg_bold[magenta]%}%n@%m %{$fg[blue]%}%D{[%X]} %{$reset_color%}%{$fg[white]%}[%~]%{$reset_color%} $(git_prompt_info) $(rsync-repo-prompt-info)\
+%{$fg[blue]%}->%{$fg_bold[blue]%} %#%{$reset_color%} '
 fi
 
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[green]%}["
