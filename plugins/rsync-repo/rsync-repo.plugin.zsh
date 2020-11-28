@@ -33,7 +33,7 @@ function rsync-repo-code-sync {
   [[ ! -d $rebase0 ]] && [[ ! -d $rebase1 ]] &&
   repo_name=`command git rev-parse --show-toplevel` &&
   exclude_file=`command git rev-parse --git-path info/exclude` &&
-  command rsync -rlptzv --progress --delete -e "ssh -o 'ControlPath=$HOME/.ssh/master-socket/%r@%h:%p'" --exclude-from=$exclude_file \
+  command rsync -rlptzv --progress -e "ssh -o 'ControlPath=$HOME/.ssh/master-socket/%r@%h:%p'" --exclude-from=$exclude_file \
     $repo_name $RSYNC_REPO_REMOTE_ROOT/. 2>/dev/null &>! $dir/RSYNC_REPO_LOG )
 }
 
